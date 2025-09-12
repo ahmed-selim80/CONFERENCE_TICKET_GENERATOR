@@ -115,67 +115,86 @@ github.addEventListener("blur", validateGithub);
 
 // 👉 Final validation (on submit)
 btn.addEventListener("click", function (e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const isValid =
-    validateFile() && validateName() && validateEmail() && validateGithub();
+    const isValid =
+        validateFile() && validateName() && validateEmail() && validateGithub();
 
-  if (isValid) {
-    // showing the success message
-    errorMsg.style.opacity = 0;
-    successMsg.style.opacity = 1;
-    
-    
-    setTimeout(function(){
-        // making the message disappear after 1 second
-        successMsg.style.opacity = 0;
+    if (isValid) {
+        // showing the success message
+        errorMsg.style.opacity = 0;
+        successMsg.style.opacity = 1;
 
-        // making the main page disappear
-        mainPage.classList.add("hidden")
+        // getting the time
+        const now = new Date();
+        const locale = navigator.language;
 
-        // showing the ticket with this user's info
-        ticketPage.innerHTML = `
-             <span> <img width="25px" src="assets/images/logo-mark.svg" alt="logo"> Coding Conf</span>
+        const options = {
+        hour: 'numeric',
+        minute: 'numeric',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        weekday: 'long', 
+        };
 
-            <h1>congrats, ${userData.name}! <br>Your ticket is ready.</h1>
-            <p>we've emailed your ticket to<br>
-                ${userData.email} and will send updates in<br>
-                the run up to the event.
-            </p>
-            <div class="ticket-div">
-                <!-- <img src="assets/images/pattern-ticket.svg" alt="ticket"> -->
-                <div class="ticket-header">
-                    <img src="assets/images/logo-full.svg" alt="">
-                    <p>31jul / 3035</p>
-                </div>
-                <div class="ticket-info">
-                    <img src="assets/images/image-avatar.jpg" alt="Personal Photo">
-                    <section class="ticket-info-text">
-                    <p>ahmed selim</p>
-                    <span><img style="margin-right: 3px;" src="assets/images/icon-github.svg" alt=""> @fakehanzo</span>
-                    </section>
-                </div>
+        const formattedDate = now.toLocaleDateString(locale , options);
+        console.log(formattedDate);
 
-                <p class="ticket-id">#4234f</p>
-            
-            </div><!-- ticket-div -->
-            <img class="line-top" src="assets/images/pattern-squiggly-line-top.svg" alt="">
-            <img class="line-bottom" src="assets/images/pattern-squiggly-line-bottom-desktop.svg" alt="">
-        `
-        ticketPage.classList.remove("hidden");
+        // creating the ticket ID
+        const ticketID = Date.now().toString().slice(-4);
+
+        
+        setTimeout(function(){
+            // making the message disappear after 1 second
+            successMsg.style.opacity = 0;
+
+            // making the main page disappear
+            mainPage.classList.add("hidden")
+
+            // saving the user's data
+            userData = {
+                name : fullName.value,
+                imageURL : URL.createObjectURL(fileInput.files[0]),
+                email : email.value,
+                github : github.value,
+            };
+
+
+
+            // showing the ticket with this user's info
+            ticketPage.innerHTML = `
+                <span> <img width="25px" src="assets/images/logo-mark.svg" alt="logo"> Coding Conf</span>
+
+                <h1>congrats, ${userData.name}! <br>Your ticket is ready.</h1>
+                <p>we've emailed your ticket to<br>
+                    ${userData.email} and will send updates in<br>
+                    the run up to the event.
+                </p>
+                <div class="ticket-div">
+                    <div class="ticket-header">
+                        <img src="assets/images/logo-full.svg" alt="">
+                        <p>${formattedDate}</p>
+                    </div>
+                    <div class="ticket-info">
+                        <img src="${userData.imageURL}" alt="Personal Photo">
+                        <section class="ticket-info-text">
+                        <p>${userData.name}</p>
+                        <span><img style="margin-right: 3px;" src="assets/images/icon-github.svg" alt=""> ${userData.github}</span>
+                        </section>
+                    </div>
+
+                    <p class="ticket-id">#${ticketID}</p>
+                
+                </div><!-- ticket-div -->
+                <img class="line-top" src="assets/images/pattern-squiggly-line-top.svg" alt="">
+                <img class="line-bottom" src="assets/images/pattern-squiggly-line-bottom-desktop.svg" alt="">
+            `
+            ticketPage.classList.remove("hidden");
 
     } , 1000)
     
-    // saving the user's data
-    userData = {
-        name : fullName.value,
-        imageURL : fileInput.value,
-        email : email.value,
-        github : github.value,
-    };
-
     
-    console.log(userData)
   } else {
     errorMsg.style.opacity = 1;
     successMsg.style.opacity = 0;

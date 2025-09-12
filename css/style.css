@@ -158,6 +158,24 @@ label{
     margin-bottom: 8px;
 }
 
+/* to deal with autofill default behavior */
+input:-webkit-autofill {
+  background-color: #ffffff14 !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff14 inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 9999s ease-in-out 0s; /* prevents white flash */
+}
+
+
+
+input:-webkit-autofill:focus {
+  background-color: #ffffff14 !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff14 inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 9999s ease-in-out 0s; /* prevents white flash */
+}
+
+
 button{
     height: 50px;
     border-radius: 10px;
@@ -264,22 +282,25 @@ img :not(.upload img){
   aspect-ratio: 16 / 7;  /* keeps proportions instead of fixed height */
 }
 
+.ticket-header{
+  display: flex;
+  flex-direction: column;
+}
+
 .ticket-header p{
-    color: var(--secondary-color);
-    font-weight: 600;
-    transform: translateX(-9px);
-    -webkit-transform: translateX(-9px);
-    -moz-transform: translateX(-9px);
-    -ms-transform: translateX(-9px);
-    -o-transform: translateX(-9px);
+  margin-top: 2px;
+  color: var(--secondary-color);
+  font-weight: 600;
 }
 
 .ticket-info{
-    display: flex;
+  display: flex;
 }
 
 .ticket-info > img{
+    display: block;
     width: 70px;
+    height: 70px;
     border-radius: 8px;
 }
 
@@ -302,7 +323,7 @@ img :not(.upload img){
 
 .ticket-id{
     position: absolute;
-    right: -1%;
+    right: 3%;
     top: 40%;
     font-size: 40px;
     transform: rotate(90deg);
@@ -396,6 +417,7 @@ img :not(.upload img){
 
   .ticket-info > img {
     width: 40px;
+    height: 40px;
   }
 
   .ticket-info-text p {
@@ -429,6 +451,7 @@ img :not(.upload img){
 
   .ticket-info > img {
     width: 50px;
+    height: 50px;
   }
 
   .ticket-info-text p {
