@@ -106,6 +106,7 @@ form{
     -moz-transition: all .3s;
     -ms-transition: all .3s;
     -o-transition: all .3s;
+    background-size: cover;
 }
 
 .upload.dragover {
@@ -116,7 +117,7 @@ form{
     background-color: rgba(255, 255, 255, 0.142);
 }
 
-.upload img{
+.upload img:not(.chosen-img){
     padding: 5px;
     margin-bottom: 10px;
     width: 60px ;
@@ -127,6 +128,7 @@ form{
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
 }
+
 
 .upload p{
     color: var(--secondary-color);

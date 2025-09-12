@@ -1,6 +1,7 @@
 "use strict";
 
-// Doing the upload input logic
+const mainPage = document.querySelector(".main-page");
+const ticketPage = document.querySelector(".ticket-main")
 const fileInput = document.getElementById("upload");
 const uploadArea = document.querySelector(".upload");
 const fullName = document.querySelector("#name");
@@ -11,13 +12,31 @@ let errorMsg = document.querySelector(".error-msg");
 let successMsg = document.querySelector(".success-msg");
 let form = document.querySelector("form");
 let validForm = true;
+let userData;
+
+
+// Doing the upload input logic
+function previewFile(file) {
+  if (!file) return;
+
+  const imageURL = URL.createObjectURL(file);
+
+  // show the name
+  uploadArea.textContent = file.name;
+
+  // show the selected image as the background
+  uploadArea.style.backgroundImage = `url(${imageURL})`;
+  uploadArea.style.backgroundPosition = "center";
+  uploadArea.style.backgroundRepeat = "no-repeat";
+  uploadArea.style.backgroundSize = "cover"; // fills area nicely
+}
 
 // Showing the selected file 
-fileInput.addEventListener("change", () => {
-  if(fileInput.files[0].name)
-    uploadArea.textContent = fileInput.files[0].name;
-  else
-    uploadArea.textContent = "File Not Found ❌";
+fileInput.addEventListener("change", function (e) {
+    e.preventDefault();
+    if (fileInput.files.length > 0) {
+        previewFile(fileInput.files[0]);
+    }
 });
 
 
@@ -40,14 +59,14 @@ uploadArea.addEventListener("dragover" , function(e){
 })
 
 // dropping the actual file into the upload area
-uploadArea.addEventListener("drop" , function(e){
-    e.preventDefault();
-    if (e.dataTransfer.files.length > 0) {
-    fileInput.files = e.dataTransfer.files;
-    uploadArea.textContent = e.dataTransfer.files[0].name;
-    console.log(e.dataTransfer.files[0])
+uploadArea.addEventListener("drop", function (e) {
+  e.preventDefault();
+
+  if (e.dataTransfer.files.length > 0) {
+    fileInput.files = e.dataTransfer.files; // sync with input
+    previewFile(fileInput.files[0]);
   }
-})
+});
 
 
 
@@ -102,8 +121,61 @@ btn.addEventListener("click", function (e) {
     validateFile() && validateName() && validateEmail() && validateGithub();
 
   if (isValid) {
+    // showing the success message
     errorMsg.style.opacity = 0;
     successMsg.style.opacity = 1;
+    
+    
+    setTimeout(function(){
+        // making the message disappear after 1 second
+        successMsg.style.opacity = 0;
+
+        // making the main page disappear
+        mainPage.classList.add("hidden")
+
+        // showing the ticket with this user's info
+        ticketPage.innerHTML = `
+             <span> <img width="25px" src="assets/images/logo-mark.svg" alt="logo"> Coding Conf</span>
+
+            <h1>congrats, ${userData.name}! <br>Your ticket is ready.</h1>
+            <p>we've emailed your ticket to<br>
+                ${userData.email} and will send updates in<br>
+                the run up to the event.
+            </p>
+            <div class="ticket-div">
+                <!-- <img src="assets/images/pattern-ticket.svg" alt="ticket"> -->
+                <div class="ticket-header">
+                    <img src="assets/images/logo-full.svg" alt="">
+                    <p>31jul / 3035</p>
+                </div>
+                <div class="ticket-info">
+                    <img src="assets/images/image-avatar.jpg" alt="Personal Photo">
+                    <section class="ticket-info-text">
+                    <p>ahmed selim</p>
+                    <span><img style="margin-right: 3px;" src="assets/images/icon-github.svg" alt=""> @fakehanzo</span>
+                    </section>
+                </div>
+
+                <p class="ticket-id">#4234f</p>
+            
+            </div><!-- ticket-div -->
+            <img class="line-top" src="assets/images/pattern-squiggly-line-top.svg" alt="">
+            <img class="line-bottom" src="assets/images/pattern-squiggly-line-bottom-desktop.svg" alt="">
+        `
+        ticketPage.classList.remove("hidden");
+
+    } , 1000)
+    
+    // saving the user's data
+    userData = {
+        name : fullName.value,
+        imageURL : fileInput.value,
+        email : email.value,
+        github : github.value,
+    };
+
+    
+    console.log(userData)
   } else {
     errorMsg.style.opacity = 1;
     successMsg.style.opacity = 0;
