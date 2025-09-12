@@ -51,58 +51,61 @@ uploadArea.addEventListener("drop" , function(e){
 
 
 
-btn.addEventListener("click" , function(e){
-    e.preventDefault();
+// Reusable validators
+function validateFile() {
+  if (fileInput.files.length === 0 || fileInput.files[0].size > 500000) {
+    uploadArea.style.border = "1px solid red";
+    return false;
+  }
+  uploadArea.style.border = "1px solid green";
+  return true;
+}
 
-    
-    // if file size is too big
-    if(fileInput.files[0]?.size > 500000 || fileInput.files.length == 0){
-        uploadArea.style.border = "1px solid red";
-        errorMsg.style.opacity = 1;
-        validForm = false;
-    }
-    else{
-        uploadArea.style.border = "1px solid green";
-        validForm = true;
-    }
-    
-    // if no name entered
-    if(fullName.value == ""){
-        fullName.style.border = "1px solid red";
-        errorMsg.style.opacity = 1;
-        validForm = false;
-    }
-    else{
-        fullName.style.border = "1px solid green";
-        validForm = true;
-    }
+function validateName() {
+  if (fullName.value.trim() === "") {
+    fullName.style.border = "1px solid red";
+    return false;
+  }
+  fullName.style.border = "1px solid green";
+  return true;
+}
 
-    // if email is not formatted correctly
-    if(!email.value.includes("@") || !email.value.endsWith(".com") || email.value == ""){
-        email.style.border = "1px solid red";
-        errorMsg.style.opacity = 1;
-        validForm = false;
-    }
-    else{
-        email.style.border = "1px solid green";
-        validForm = true;
-    }
+function validateEmail() {
+  if (!email.value.includes("@") || !email.value.endsWith(".com")) {
+    email.style.border = "1px solid red";
+    return false;
+  }
+  email.style.border = "1px solid green";
+  return true;
+}
 
-    // if github username isn't correct
-    if(!github.value.startsWith("@") || github.value == ""){
-        github.style.border = "1px solid red";
-        errorMsg.style.opacity = 1;
-        validForm = false;
-    }
-    else{
-        github.style.border = "1px solid green";
-        validForm = true;
-    }
+function validateGithub() {
+  if (!github.value.startsWith("@") || github.value.trim() === "") {
+    github.style.border = "1px solid red";
+    return false;
+  }
+  github.style.border = "1px solid green";
+  return true;
+}
 
-    if(validForm){
-        errorMsg.style.opacity = 0;
-        successMsg.style.opacity = 1;
-    }
+// 👉 Field-level validation (on blur)
+fileInput.addEventListener("change", validateFile);
+fullName.addEventListener("blur", validateName);
+email.addEventListener("blur", validateEmail);
+github.addEventListener("blur", validateGithub);
 
+// 👉 Final validation (on submit)
+btn.addEventListener("click", function (e) {
+  e.preventDefault();
 
-})
+  const isValid =
+    validateFile() && validateName() && validateEmail() && validateGithub();
+
+  if (isValid) {
+    errorMsg.style.opacity = 0;
+    successMsg.style.opacity = 1;
+  } else {
+    errorMsg.style.opacity = 1;
+    successMsg.style.opacity = 0;
+  }
+});
