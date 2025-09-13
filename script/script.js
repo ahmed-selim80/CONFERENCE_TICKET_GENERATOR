@@ -72,7 +72,7 @@ uploadArea.addEventListener("drop", function (e) {
 
 // Reusable validators
 function validateFile() {
-  if (fileInput.files.length === 0 || fileInput.files[0].size > 500000) {
+  if (fileInput.files.length === 0 || fileInput.files[0].size > 5000000) {
     uploadArea.style.border = "1px solid red";
     return false;
   }

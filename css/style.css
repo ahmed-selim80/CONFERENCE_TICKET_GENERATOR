@@ -357,6 +357,10 @@ img :not(.upload img){
   .line-bottom{
     display: none;
   }
+
+  button{
+    margin-bottom: 20px;
+  }
 }
 
 @media (min-width: 577px) and (max-width: 991px) {
@@ -374,6 +378,10 @@ img :not(.upload img){
 
   .line-bottom{
     display: none;
+  }
+
+  button{
+    margin-bottom: 20px;
   }
 }
 
